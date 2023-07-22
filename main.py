@@ -1,20 +1,7 @@
 import tkinter as tk
-from tkinter import *
 
 
-# head
-
-root = Tk()
-root.title("calculator")
-root.geometry("500x805")
-root.iconbitmap("calculatorico.ico")
-root.resizable(False, False)
-root.wm_attributes("-topmost", 1)
-root.configure(bg="black")
-
-# counting function
-
-
+# Counting function
 def calculate(operation):
     global formula
 
@@ -34,23 +21,45 @@ def calculate(operation):
         formula = str((eval(formula)) ** 0.2)
     elif operation == "%":
         formula = str((eval(formula)) / 100)
-
     else:
         if formula == "0":
             formula = ""
         formula += operation
-    Label_text.configure(text=formula)
+    label_text.configure(text=formula)
 
 
-# display window
+# GUI Setup
+def create_gui():
+    root = tk.Tk()
+    root.title("Calculator")
+    root.geometry("500x805")
+    root.iconbitmap("calculatorico.ico")
+    root.resizable(False, False)
+    root.wm_attributes("-topmost", 1)
+    root.configure(bg="black")
+    return root
 
-formula = "0"
-Label_text = tk.Label(text=formula, font=("Roboto", 30, "bold"), bg="black", fg="white")
-Label_text.place(x=11, y=50)
+
+def create_display(root):
+    global formula
+    formula = "0"
+    label_text = tk.Label(
+        root, text=formula, font=("Roboto", 30, "bold"), bg="black", fg="white"
+    )
+    label_text.place(x=11, y=50)
+    return label_text
 
 
-# buttons
+def create_button(root, text, x, y):
+    def get_label():
+        calculate(text)
 
+    tk.Button(
+        root, text=text, bg="green", fg="white", font=("Roboto", 20), command=get_label
+    ).place(x=x, y=y, width=115, height=79)
+
+
+# Buttons
 buttons = [
     "C",
     "del",
@@ -86,18 +95,20 @@ buttons = [
 ]
 
 
-x = 18
-y = 140
-for button in buttons:
-    get_lbl = lambda x=button: calculate(x)
-    Button(
-        text=button, bg="green", fg="white", font=("Roboto", 20), command=get_lbl
-    ).place(x=x, y=y, width=115, height=79)
-    x += 117
+def create_buttons(root):
+    x, y = 18, 140
+    for button in buttons:
+        create_button(root, button, x, y)
+        x += 117
 
-    if x > 400:
-        x = 18
-        y += 81
+        # Creating a new line of buttons if the previous one is full
+        if x > 400:
+            x = 18
+            y += 81
 
 
-root.mainloop()
+if __name__ == "__main__":
+    root = create_gui()
+    label_text = create_display(root)
+    create_buttons(root)
+    root.mainloop()
