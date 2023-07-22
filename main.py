@@ -1,7 +1,7 @@
 import tkinter as tk
-
-
+import math
 # Counting function
+
 def calculate(operation):
     global formula
 
@@ -21,6 +21,18 @@ def calculate(operation):
         formula = str((eval(formula)) ** 0.2)
     elif operation == "%":
         formula = str((eval(formula)) / 100)
+    elif operation == "^2":
+        formula = str((eval(formula)) ** 2)
+    elif operation == "^3":
+        formula = str((eval(formula)) ** 3)
+    elif operation == "^4":
+        formula = str((eval(formula)) ** 4)
+    elif operation == "^5":
+        formula = str((eval(formula)) ** 5)
+    elif operation == "π":
+        formula = str(eval("math.pi"))
+    elif operation == "e":
+        formula = str(eval("math.e"))
     else:
         if formula == "0":
             formula = ""
@@ -89,9 +101,10 @@ buttons = [
     "∛",
     "∜",
     "5√",
-    "3.14",
+    "π",
     "(",
     ")",
+    "e",
 ]
 
 
