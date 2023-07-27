@@ -1,10 +1,12 @@
 import math
+from history import CalculatorHistory
 
 
 class Calculator:
     def __init__(self) -> None:
         """Initialize the Calculator with a default formula of '0'."""
         self.formula = "0"
+        self.history = CalculatorHistory()
 
     def is_last_char_operator(self) -> bool:
         """Check if the last character in the formula is an operator."""
@@ -74,3 +76,12 @@ class Calculator:
             self.formula += operation
             if self.formula == ".":
                 self.formula = "0."
+
+    def save_to_history(self, formula: str, result: str) -> None:
+        """Save the calculation to the history.
+
+        Args:
+            formula (str): The formula that was calculated.
+            result (str): The result of the calculation.
+        """
+        self.history.add_to_history(formula, result)

@@ -6,20 +6,31 @@ from consts import buttons
 
 class CalculatorApp:
     def __init__(self) -> None:
-        """Initialize the CalculatorApp."""
-        self.root = tk.Tk()
-        self.root.title("Calculator")
-        self.root.geometry("850x805")
-        # Check if running on Windows to set the icon
-        if platform.system() == "Windows":
-            self.root.iconbitmap("calculatorico.ico")
-        self.root.resizable(False, False)
-        self.root.wm_attributes("-topmost", 1)
-        self.root.configure(bg="black")
-
+        """Initialize the CalculatorApp and set up the GUI."""
+        self.root = self.create_gui()
         self.calculator = Calculator()
         self.label_text = self.create_display()
         self.create_buttons()
+
+    def create_gui(self) -> tk.Tk:
+        """Create the main GUI window."""
+        root = tk.Tk()
+        root.title("Calculator")
+        root.geometry("850x805")
+        # Check if running on Windows to set the icon
+        if platform.system() == "Windows":
+            root.iconbitmap("calculatorico.ico")
+        root.resizable(False, False)
+        root.wm_attributes("-topmost", 1)
+        root.configure(bg="black")
+
+        # Create a Text widget to display the calculation history
+        self.history_text = tk.Text(
+            root, font=("Roboto", 14), bg="white", fg="black", height=15, width=55
+        )
+        self.history_text.place(x=258, y=490)
+
+        return root
 
     def create_display(self) -> tk.Label:
         """Create a Label widget to display the calculator's formula."""
@@ -60,6 +71,21 @@ class CalculatorApp:
             if x > 800:
                 x = 18
                 y += 81
+
+    def update_history_text(self) -> None:
+        """Update the calculation history displayed in the Text widget."""
+        self.history_text.delete(1.0, tk.END)  # Clear the Text widget
+        history = self.calculator.get_history()
+        for formula, result in history:
+            entry = f"{formula} = {result}\n"
+            self.history_text.insert(tk.END, entry)
+
+    def save_to_history(self) -> None:
+        """Save the current calculation to the history."""
+        formula = self.calculator.get_formula()
+        result = self.label_text["text"]
+        self.calculator.save_to_history(formula, result)
+        self.update_history_text()
 
     def run(self) -> None:
         """Start the main window's event loop."""
